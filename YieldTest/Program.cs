@@ -10,7 +10,7 @@ namespace YieldTest
         {
             Console.WriteLine("Hello World!");
 
-            M1(0, 0);
+            M1(0, 0, 0);
 
             for (int i = 0; i < 4; i++)
             {
@@ -29,10 +29,10 @@ namespace YieldTest
         static int a = 0;
         static bool finish = false;
         static int[] cnstrs = new[] {
-            0, 0, 0, 0,   // >
-            2, 0, 0, 0,   // V
-            0, 2, 0, 0,   // <
-            0, 0, 0, 0 }; // ^
+            0, 0, 1, 2,   // >
+            0, 2, 0, 0,   // V
+            0, 3, 0, 0,   // <
+            0, 1, 0, 0 }; // ^
 
         static int _size = 4;
 
