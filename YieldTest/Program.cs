@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace YieldTest
 {
@@ -27,20 +28,15 @@ namespace YieldTest
         static int[,] arr = GetMockArr();
         static int a = 0;
         static bool finish = false;
+        static int[] cnstrs = new [] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static int _size = 4;
 
         static void M1(int x, int y, int prev = 0)
         {
             a++;
 
             if (finish) return;
-
-            // skip that already set
-            // this is not needed
-            while(AlreadySet(x, y) && !finish)
-            {
-                Next(ref x, ref y);
-            }
-
+        
             foreach (var item in GetNum(prev))
             {
                 if (Check(x, y, item))
@@ -59,6 +55,12 @@ namespace YieldTest
             M1(x, y, val);
         }
 
+        /// <summary>
+        /// This is needed if arr already contains nums
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static bool AlreadySet(int x, int y)
         {
             return arr[x, y] > 0;
@@ -66,7 +68,68 @@ namespace YieldTest
 
         private static bool Check(int x, int y, int item)
         {
-            for (int i = 0; i < 4; i++)
+            if (!IfItemAlreadyInRowOrInCol(x, y, item)) return false;
+
+            if (!CheckConditions(x, y, item)) return false;
+
+            return true;
+        }
+
+        private static bool CheckConditions(int x, int y, int item)
+        {
+            var res = true;
+            var ctrs = GetConstrains(x, y);
+
+            if (ctrs.All(i => i == 0)) return true;
+
+            arr[x, y] = item;
+
+            if (ctrs.Any(i => i == 1))
+                res = Cons1(ctrs, x, y);
+
+            if (!res) arr[x, y] = 0;
+
+            return res;
+        }
+
+        private static List<int> GetConstrains(int x, int y)
+        {
+            var lRow = cnstrs[_size * _size - 1 - x];
+            var rRow = cnstrs[_size * 2 - 1 - x];
+            var lCol = cnstrs[y];
+            var rCol = cnstrs[_size * 3 - 1 - y];
+
+            return new List<int> { lRow, rRow, lCol, rCol };
+        }
+
+        private static bool Cons1(List<int> ctrs, int x, int y)
+        {
+            if(ctrs[0] == 1)
+            {
+                return arr[x, 0] == 4 || arr[x, 0] == 0;
+            }
+            
+            if(ctrs[1] == 1)
+            {
+                return arr[x, 3] == 4 || arr[x, 3] == 0;
+            }
+            
+            if(ctrs[2] == 1)
+            {
+                return arr[0, y] == 4 || arr[0, y] == 0;
+            }
+
+            if(ctrs[3] == 1)
+            {
+                return arr[3, y] == 4 || arr[3, y] == 0;
+            }
+
+            return true;
+        }
+
+        private static bool IfItemAlreadyInRowOrInCol(int x, int y, int item)
+        {
+            for (int i = 0; i < _size; i++)
             {
                 //row
                 if (arr[x, i] == item) return false;
@@ -74,8 +137,6 @@ namespace YieldTest
                 //col
                 if (arr[i, y] == item) return false;
             }
-
-            // 3 add constrains check 
 
             return true;
         }
@@ -117,9 +178,9 @@ namespace YieldTest
             return new int[4, 4]
             {
                 { 0, 0, 0, 0,},
-                { 4, 0, 0, 2,},
-                { 0, 0, 0, 3,},
-                { 0, 0, 0, 4,}
+                { 0, 0, 0, 0,},
+                { 0, 0, 0, 0,},
+                { 0, 0, 0, 0,}
             };
         }
     }
