@@ -29,10 +29,11 @@ namespace YieldTest
         static int a = 0;
         static bool finish = false;
         static int[] cnstrs = new[] { 
-            0, 4, 0, 0, 
-            0, 0, 0, 0,
-            0, 4, 0, 0,
-            0, 0, 0, 0 };
+            0, 4, 0, 0,   // >
+            0, 0, 0, 0,   // V
+            0, 4, 0, 0,   // <
+            0, 0, 0, 0 }; // ^
+
         static int _size = 4;
 
         static void M1(int x, int y, int prev = 0)
