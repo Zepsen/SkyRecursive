@@ -28,7 +28,11 @@ namespace YieldTest
         static int[,] arr = GetMockArr();
         static int a = 0;
         static bool finish = false;
-        static int[] cnstrs = new[] { 1, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static int[] cnstrs = new[] { 
+            0, 4, 0, 0, 
+            0, 0, 0, 0,
+            0, 4, 0, 0,
+            0, 0, 0, 0 };
         static int _size = 4;
 
         static void M1(int x, int y, int prev = 0)
@@ -128,9 +132,9 @@ namespace YieldTest
 
             if (ctrs[1] == 4)
             {
-                for (int i = _size - 1; i >= 0; i--)
+                for (int i = 0;  i < _size; i++)
                 {
-                    if (arr[x, i] == i + 1 || arr[x, i] == 0)
+                    if (arr[x, _size - 1 - i] == i + 1 || arr[x, _size - 1 - i] == 0)
                         continue;
 
                     return false;
@@ -150,9 +154,9 @@ namespace YieldTest
 
             if (ctrs[3] == 4)
             {
-                for (int i = _size - 1; i >= 0; i--)
+                for (int i = 0; i < _size; i++)
                 {
-                    if (arr[i, y] == i - 1 || arr[i, y] == 0)
+                    if (arr[_size - 1 - i, y] == i + 1 || arr[_size - 1 - i, y] == 0)
                         continue;
 
                     return false;
