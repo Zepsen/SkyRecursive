@@ -30,8 +30,8 @@ namespace YieldTest
         static bool finish = false;
         static int[] cnstrs = new[] {
             0, 0, 0, 0,   // >
-            0, 0, 0, 3,   // V
-            0, 0, 0, 0,   // <
+            2, 0, 0, 0,   // V
+            0, 2, 0, 0,   // <
             0, 0, 0, 0 }; // ^
 
         static int _size = 4;
@@ -117,7 +117,96 @@ namespace YieldTest
                 return res;
             }
 
+            if (ctrs.Any(i => i == 2))
+                res = Cons2(ctrs, x, y);
+
+            if (!res)
+            {
+                arr[x, y] = 0;
+                return res;
+            }
+
             return res;
+        }
+
+        private static bool Cons2(List<int> ctrs, int x, int y)
+        {
+            if (ctrs[0] == 2)
+            {
+                if (arr[x, 0] == 4) return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, i] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[x, 0];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, i] > min) see++;
+                }
+
+                return see == 2;
+            }
+
+            if (ctrs[1] == 2)
+            {
+                if (arr[x, 3] == 4) return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, _size - 1 - i] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[x, 3];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, _size - 1 - i] > min) see++;
+                }
+
+                return see == 2;
+            }
+
+            if (ctrs[2] == 2)
+            {
+                if (arr[0, y] == 4) return false;
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[0, y];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] > min) see++;
+                }
+
+                return see == 2;
+            }
+
+            if (ctrs[3] == 2)
+            {
+                if (arr[3, y] == 4) return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[_size - 1 - i, y] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[3, y];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[_size - 1 - i, y] > min) see++;
+                }
+
+                return see == 2;
+            }
+
+            return true;
         }
 
         private static bool Cons3(List<int> ctrs, int x, int y)
@@ -271,7 +360,7 @@ namespace YieldTest
         private static List<int> GetConstrains(int x, int y)
         {
             var lRow = cnstrs[_size * _size - 1 - x];
-            var rRow = cnstrs[_size * 2 - 1 - x];
+            var rRow = cnstrs[_size + x];
             var lCol = cnstrs[y];
             var rCol = cnstrs[_size * 3 - 1 - y];
 
