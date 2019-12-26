@@ -28,7 +28,7 @@ namespace YieldTest
         static int[,] arr = GetMockArr();
         static int a = 0;
         static bool finish = false;
-        static int[] cnstrs = new [] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static int[] cnstrs = new[] { 1, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         static int _size = 4;
 
         static void M1(int x, int y, int prev = 0)
@@ -36,7 +36,7 @@ namespace YieldTest
             a++;
 
             if (finish) return;
-        
+
             foreach (var item in GetNum(prev))
             {
                 if (Check(x, y, item))
@@ -48,7 +48,7 @@ namespace YieldTest
             }
 
             if (finish) return;
-            
+
             Back(ref x, ref y);
             var val = arr[x, y];
             arr[x, y] = 0;
@@ -87,9 +87,79 @@ namespace YieldTest
             if (ctrs.Any(i => i == 1))
                 res = Cons1(ctrs, x, y);
 
-            if (!res) arr[x, y] = 0;
+            if (!res)
+            {
+                arr[x, y] = 0;
+                return false;
+            }
+
+
+            if (ctrs.Any(i => i == 4))
+                res = Cons4(ctrs, x, y);
+
+            if (!res)
+            {
+                arr[x, y] = 0;
+                return res;
+            }
 
             return res;
+        }
+
+        /// <summary>
+        /// Check if constrain 4
+        /// </summary>
+        /// <param name="ctrs"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private static bool Cons4(List<int> ctrs, int x, int y)
+        {
+            if (ctrs[0] == 4)
+            {
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, i] == i + 1 || arr[x, i] == 0)
+                        continue;
+
+                    return false;
+                }
+            }
+
+            if (ctrs[1] == 4)
+            {
+                for (int i = _size - 1; i >= 0; i--)
+                {
+                    if (arr[x, i] == i + 1 || arr[x, i] == 0)
+                        continue;
+
+                    return false;
+                }
+            }
+
+            if (ctrs[2] == 4)
+            {
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] == i + 1 || arr[i, y] == 0)
+                        continue;
+
+                    return false;
+                }
+            }
+
+            if (ctrs[3] == 4)
+            {
+                for (int i = _size - 1; i >= 0; i--)
+                {
+                    if (arr[i, y] == i - 1 || arr[i, y] == 0)
+                        continue;
+
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static List<int> GetConstrains(int x, int y)
@@ -102,24 +172,31 @@ namespace YieldTest
             return new List<int> { lRow, rRow, lCol, rCol };
         }
 
+        /// <summary>
+        /// Check if constrains 1
+        /// </summary>
+        /// <param name="ctrs"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private static bool Cons1(List<int> ctrs, int x, int y)
         {
-            if(ctrs[0] == 1)
+            if (ctrs[0] == 1)
             {
                 return arr[x, 0] == 4 || arr[x, 0] == 0;
             }
-            
-            if(ctrs[1] == 1)
+
+            if (ctrs[1] == 1)
             {
                 return arr[x, 3] == 4 || arr[x, 3] == 0;
             }
-            
-            if(ctrs[2] == 1)
+
+            if (ctrs[2] == 1)
             {
                 return arr[0, y] == 4 || arr[0, y] == 0;
             }
 
-            if(ctrs[3] == 1)
+            if (ctrs[3] == 1)
             {
                 return arr[3, y] == 4 || arr[3, y] == 0;
             }
@@ -162,9 +239,9 @@ namespace YieldTest
             }
 
             if (y == 3) y = 0; else y += 1;
-            if (y == 0) x += 1; 
+            if (y == 0) x += 1;
         }
-       
+
         static IEnumerable<int> GetNum(int n)
         {
             for (int i = n + 1; i < 5; i++)
