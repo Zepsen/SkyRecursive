@@ -28,10 +28,10 @@ namespace YieldTest
         static int[,] arr = GetMockArr();
         static int a = 0;
         static bool finish = false;
-        static int[] cnstrs = new[] { 
-            0, 4, 0, 0,   // >
-            0, 0, 0, 0,   // V
-            0, 4, 0, 0,   // <
+        static int[] cnstrs = new[] {
+            0, 0, 0, 0,   // >
+            0, 0, 0, 3,   // V
+            0, 0, 0, 0,   // <
             0, 0, 0, 0 }; // ^
 
         static int _size = 4;
@@ -108,7 +108,108 @@ namespace YieldTest
                 return res;
             }
 
+            if (ctrs.Any(i => i == 3))
+                res = Cons3(ctrs, x, y);
+
+            if (!res)
+            {
+                arr[x, y] = 0;
+                return res;
+            }
+
             return res;
+        }
+
+        private static bool Cons3(List<int> ctrs, int x, int y)
+        {
+            if (ctrs[0] == 3)
+            {
+                if (arr[x, 0] == 4 ||
+                    arr[x, 1] == 4 ||
+                    arr[x, 0] == 3)
+                    return false;
+                
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, i] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[x, 0];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, i] > min) see++;
+                }
+
+                return see == 3;
+            }
+
+            if (ctrs[1] == 3)
+            {
+                if (arr[x, 3] == 4 ||
+                    arr[x, 2] == 4 ||
+                    arr[x, 3] == 3)
+                    return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, _size - 1 - i] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[x, 3];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[x, _size - 1 - i] > min) see++;
+                }
+
+                return see == 3;
+            }
+
+            if (ctrs[2] == 3)
+            {
+                if (arr[0, y] == 4 ||
+                    arr[1, y] == 4 ||
+                    arr[0, y] == 3)
+                    return false;
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[0, y];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] > min) see++;
+                }
+
+                return see == 3;
+            }
+
+            if (ctrs[3] == 3)
+            {
+                if (arr[3, y] == 4 ||
+                    arr[2, y] == 4 ||
+                    arr[3, y] == 3)
+                    return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[_size - 1 - i, y] == 0) return true;
+                }
+
+                var see = 1;
+                var min = arr[3, y];
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[_size - 1 - i, y] > min) see++;
+                }
+
+                return see == 3;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -133,7 +234,7 @@ namespace YieldTest
 
             if (ctrs[1] == 4)
             {
-                for (int i = 0;  i < _size; i++)
+                for (int i = 0; i < _size; i++)
                 {
                     if (arr[x, _size - 1 - i] == i + 1 || arr[x, _size - 1 - i] == 0)
                         continue;
