@@ -17,7 +17,7 @@ namespace YieldTest
             M2(0, 0, 0);
             timer.Stop();
             Console.WriteLine($"Res: {timer.ElapsedTicks}");
-            
+
             for (int i = 0; i < 4; i++)
             {
                 for (int y = 0; y < 4; y++)
@@ -31,7 +31,7 @@ namespace YieldTest
             Console.WriteLine(a);
         }
 
-        static int[,] arr = new int[4, 4] 
+        static int[,] arr = new int[4, 4]
             {
                 { 0, 0, 0, 0,},
                 { 0, 0, 0, 0,},
@@ -56,8 +56,8 @@ namespace YieldTest
                 a++;
                 go = false;
                 foreach (var item in GetNum(prev))
-                {                    
-                    if(Check(x, y, item))
+                {
+                    if (Check(x, y, item))
                     {
                         arr[x, y] = item;
                         go = true;
@@ -75,10 +75,11 @@ namespace YieldTest
                     Back(ref x, ref y);
                     prev = arr[x, y];
                     arr[x, y] = 0;
-                }          
+                }
             }
         }
 
+        [Obsolete("recursive")]
         static void M1(int x, int y, int prev = 0)
         {
             a++;
@@ -118,9 +119,9 @@ namespace YieldTest
             if (ctrs.All(i => i == 0)) return true;
 
             arr[x, y] = item;
-            
+
             var res = Cons1(ctrs, x, y) &&
-                Cons2(ctrs, x, y) && 
+                Cons2(ctrs, x, y) &&
                 Cons3(ctrs, x, y) &&
                 Cons4(ctrs, x, y);
 
@@ -163,7 +164,58 @@ namespace YieldTest
                     if (arr[x, i] == 0) return true;
                 }
 
-                var see = 1;
+                int see = CalcSee(x, y, 0);
+                return see == 2;
+            }
+
+            if (ctrs[1] == 2)
+            {
+                if (arr[x, 3] == 4) return false;
+
+                for (int i = _size - 1; i > -1; i--)
+                {
+                    if (arr[x, i] == 0) return true;
+                }
+
+                int see = CalcSee(x, y, 1);
+                return see == 2;
+            }
+
+            if (ctrs[2] == 2)
+            {
+                if (arr[0, y] == 4) return false;
+
+                for (int i = 0; i < _size; i++)
+                {
+                    if (arr[i, y] == 0) return true;
+                }
+
+                int see = CalcSee(x, y, 2);
+                return see == 2;
+            }
+
+            if (ctrs[3] == 2)
+            {
+                if (arr[3, y] == 4) return false;
+
+                for (int i = _size-1; i > -1; i--)
+                {
+                    if (arr[i, y] == 0) return true;
+                }
+
+                int see = CalcSee(x, y, 3);
+                return see == 2;
+            }
+
+            return true;
+        }
+     
+        private static int CalcSee(int x, int y, int vector)
+        {
+            var see = 1;
+
+            if (vector == 0)
+            {
                 var max = arr[x, 0];
                 for (int i = 0; i < _size; i++)
                 {
@@ -173,42 +225,23 @@ namespace YieldTest
                         see++;
                     }
                 }
-
-                return see == 2;
             }
 
-            if (ctrs[1] == 2)
+            else if (vector == 1)
             {
-                if (arr[x, 3] == 4) return false;
-
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[x, _size - 1 - i] == 0) return true;
-                }
-
-                var see = 1;
                 var max = arr[x, 3];
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[x, _size - 1 - i] > max)
+                    if (arr[x, i] > max)
                     {
-                        max = arr[x, _size - 1 - i];
+                        max = arr[x,i];
                         see++;
                     }
                 }
-
-                return see == 2;
             }
 
-            if (ctrs[2] == 2)
+            else if (vector == 2)
             {
-                if (arr[0, y] == 4) return false;
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[i, y] == 0) return true;
-                }
-
-                var see = 1;
                 var max = arr[0, y];
                 for (int i = 0; i < _size; i++)
                 {
@@ -218,35 +251,24 @@ namespace YieldTest
                         see++;
                     }
                 }
-
-                return see == 2;
             }
 
-            if (ctrs[3] == 2)
+            else if (vector == 3)
             {
-                if (arr[3, y] == 4) return false;
-
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[_size - 1 - i, y] == 0) return true;
-                }
-
-                var see = 1;
                 var max = arr[3, y];
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[_size - 1 - i, y] > max)
+                    if (arr[i, y] > max)
                     {
-                        max = arr[_size - 1 - i, y];
+                        max = arr[i, y];
                         see++;
                     }
                 }
-
-                return see == 2;
             }
 
-            return true;
+            return see;
         }
+
         private static bool Cons3(List<int> ctrs, int x, int y)
         {
             if (ctrs[0] == 3)
@@ -261,17 +283,7 @@ namespace YieldTest
                     if (arr[x, i] == 0) return true;
                 }
 
-                var see = 1;
-                var max = arr[x, 0];
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[x, i] > max)
-                    {
-                        max = arr[x, i];
-                        see++;
-                    }
-                }
-
+                int see = CalcSee(x, y, 0);
                 return see == 3;
             }
 
@@ -282,22 +294,12 @@ namespace YieldTest
                     arr[x, 3] == 3)
                     return false;
 
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[x, _size - 1 - i] == 0) return true;
+                    if (arr[x, i] == 0) return true;
                 }
 
-                var see = 1;
-                var max = arr[x, 3];
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[x, _size - 1 - i] > max)
-                    {
-                        max = arr[x, _size - 1 - i];
-                        see++;
-                    }
-                }
-
+                int see = CalcSee(x, y, 1);
                 return see == 3;
             }
 
@@ -312,17 +314,7 @@ namespace YieldTest
                     if (arr[i, y] == 0) return true;
                 }
 
-                var see = 1;
-                var max = arr[0, y];
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[i, y] > max)
-                    {
-                        max = arr[i, y];
-                        see++;
-                    }
-                }
-
+                int see = CalcSee(x, y, 2);
                 return see == 3;
             }
 
@@ -333,22 +325,12 @@ namespace YieldTest
                     arr[3, y] == 3)
                     return false;
 
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[_size - 1 - i, y] == 0) return true;
+                    if (arr[i, y] == 0) return true;
                 }
 
-                var see = 1;
-                var max = arr[3, y];
-                for (int i = 0; i < _size; i++)
-                {
-                    if (arr[_size - 1 - i, y] > max)
-                    {
-                        max = arr[_size - 1 - i, y];
-                        see++;
-                    }
-                }
-
+                int see = CalcSee(x, y, 3);
                 return see == 3;
             }
 
@@ -369,9 +351,9 @@ namespace YieldTest
 
             if (ctrs[1] == 4)
             {
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[x, _size - 1 - i] == i + 1 || arr[x, _size - 1 - i] == 0)
+                    if (arr[x, i] == i + 1 || arr[x, i] == 0)
                         continue;
 
                     return false;
@@ -391,9 +373,9 @@ namespace YieldTest
 
             if (ctrs[3] == 4)
             {
-                for (int i = 0; i < _size; i++)
+                for (int i = _size - 1; i > -1; i--)
                 {
-                    if (arr[_size - 1 - i, y] == i + 1 || arr[_size - 1 - i, y] == 0)
+                    if (arr[i, y] == i + 1 || arr[i, y] == 0)
                         continue;
 
                     return false;
@@ -412,7 +394,7 @@ namespace YieldTest
 
             return new List<int> { lRow, rRow, lCol, rCol };
         }
-       
+
         private static bool IfItemAlreadyInRowOrInCol(int x, int y, int item)
         {
             for (int i = 0; i < _size; i++)
@@ -453,8 +435,8 @@ namespace YieldTest
 
         static IEnumerable<int> GetNum(int n)
         {
-            for (int i = n + 1; i < 5; i++)            
-                yield return i;            
+            for (int i = n + 1; i < 5; i++)
+                yield return i;
         }
     }
 }
