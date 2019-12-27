@@ -25,7 +25,13 @@ namespace YieldTest
             Console.WriteLine(a);
         }
 
-        static int[,] arr = GetMockArr();
+        static int[,] arr = new int[4, 4] 
+            {
+                { 0, 0, 0, 0,},
+                { 0, 0, 0, 0,},
+                { 0, 0, 0, 0,},
+                { 0, 0, 0, 0,}
+            };
         static int a = 0;
         static bool finish = false;
         static int[] cnstrs = new[] {
@@ -58,17 +64,6 @@ namespace YieldTest
             var val = arr[x, y];
             arr[x, y] = 0;
             M1(x, y, val);
-        }
-
-        /// <summary>
-        /// This is needed if arr already contains nums
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        private static bool AlreadySet(int x, int y)
-        {
-            return arr[x, y] > 0;
         }
 
         private static bool Check(int x, int y, int item)
@@ -233,7 +228,7 @@ namespace YieldTest
                     arr[x, 1] == 4 ||
                     arr[x, 0] == 3)
                     return false;
-                
+
                 for (int i = 0; i < _size; i++)
                 {
                     if (arr[x, i] == 0) return true;
@@ -269,7 +264,7 @@ namespace YieldTest
                 var max = arr[x, 3];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[x, _size - 1 - i] > max) 
+                    if (arr[x, _size - 1 - i] > max)
                     {
                         max = arr[x, _size - 1 - i];
                         see++;
@@ -294,7 +289,7 @@ namespace YieldTest
                 var max = arr[0, y];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[i, y] > max) 
+                    if (arr[i, y] > max)
                     {
                         max = arr[i, y];
                         see++;
@@ -322,7 +317,7 @@ namespace YieldTest
                 {
                     if (arr[_size - 1 - i, y] > max)
                     {
-                        max = arr[_size - 1 -i, y];
+                        max = arr[_size - 1 - i, y];
                         see++;
                     }
                 }
@@ -332,14 +327,6 @@ namespace YieldTest
 
             return true;
         }
-
-        /// <summary>
-        /// Check if constrain 4
-        /// </summary>
-        /// <param name="ctrs"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         private static bool Cons4(List<int> ctrs, int x, int y)
         {
             if (ctrs[0] == 4)
@@ -399,13 +386,6 @@ namespace YieldTest
             return new List<int> { lRow, rRow, lCol, rCol };
         }
 
-        /// <summary>
-        /// Check if constrains 1
-        /// </summary>
-        /// <param name="ctrs"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         private static bool Cons1(List<int> ctrs, int x, int y)
         {
             if (ctrs[0] == 1)
@@ -475,17 +455,6 @@ namespace YieldTest
             {
                 yield return i;
             }
-        }
-
-        static int[,] GetMockArr()
-        {
-            return new int[4, 4]
-            {
-                { 0, 0, 0, 0,},
-                { 0, 0, 0, 0,},
-                { 0, 0, 0, 0,},
-                { 0, 0, 0, 0,}
-            };
         }
     }
 }
