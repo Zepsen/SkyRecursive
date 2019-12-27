@@ -141,10 +141,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[x, 0];
+                var max = arr[x, 0];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[x, i] > min) see++;
+                    if (arr[x, i] > max)
+                    {
+                        max = arr[x, i];
+                        see++;
+                    }
                 }
 
                 return see == 2;
@@ -160,10 +164,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[x, 3];
+                var max = arr[x, 3];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[x, _size - 1 - i] > min) see++;
+                    if (arr[x, _size - 1 - i] > max)
+                    {
+                        max = arr[x, _size - 1 - i];
+                        see++;
+                    }
                 }
 
                 return see == 2;
@@ -178,10 +186,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[0, y];
+                var max = arr[0, y];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[i, y] > min) see++;
+                    if (arr[i, y] > max)
+                    {
+                        max = arr[i, y];
+                        see++;
+                    }
                 }
 
                 return see == 2;
@@ -197,10 +209,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[3, y];
+                var max = arr[3, y];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[_size - 1 - i, y] > min) see++;
+                    if (arr[_size - 1 - i, y] > max)
+                    {
+                        max = arr[_size - 1 - i, y];
+                        see++;
+                    }
                 }
 
                 return see == 2;
@@ -224,10 +240,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[x, 0];
+                var max = arr[x, 0];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[x, i] > min) see++;
+                    if (arr[x, i] > max)
+                    {
+                        max = arr[x, i];
+                        see++;
+                    }
                 }
 
                 return see == 3;
@@ -246,10 +266,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[x, 3];
+                var max = arr[x, 3];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[x, _size - 1 - i] > min) see++;
+                    if (arr[x, _size - 1 - i] > max) 
+                    {
+                        max = arr[x, _size - 1 - i];
+                        see++;
+                    }
                 }
 
                 return see == 3;
@@ -267,10 +291,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[0, y];
+                var max = arr[0, y];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[i, y] > min) see++;
+                    if (arr[i, y] > max) 
+                    {
+                        max = arr[i, y];
+                        see++;
+                    }
                 }
 
                 return see == 3;
@@ -289,10 +317,14 @@ namespace YieldTest
                 }
 
                 var see = 1;
-                var min = arr[3, y];
+                var max = arr[3, y];
                 for (int i = 0; i < _size; i++)
                 {
-                    if (arr[_size - 1 - i, y] > min) see++;
+                    if (arr[_size - 1 - i, y] > max)
+                    {
+                        max = arr[_size - 1 -i, y];
+                        see++;
+                    }
                 }
 
                 return see == 3;
