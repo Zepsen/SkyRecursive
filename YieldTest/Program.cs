@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Timers;
 
 namespace YieldTest
 {
@@ -10,8 +12,12 @@ namespace YieldTest
         {
             Console.WriteLine("Hello World!");
 
-            M1(0, 0, 0);
-
+            var timer = new Stopwatch();
+            timer.Start();
+            M2(0, 0, 0);
+            timer.Stop();
+            Console.WriteLine($"Res: {timer.ElapsedTicks}");
+            
             for (int i = 0; i < 4; i++)
             {
                 for (int y = 0; y < 4; y++)
@@ -41,6 +47,37 @@ namespace YieldTest
             0, 1, 0, 0 }; // ^
 
         static int _size = 4;
+
+        static void M2(int x, int y, int prev = 0)
+        {
+            var go = false;
+            while (!finish)
+            {
+                a++;
+                go = false;
+                foreach (var item in GetNum(prev))
+                {                    
+                    if(Check(x, y, item))
+                    {
+                        arr[x, y] = item;
+                        go = true;
+                        break;
+                    }
+                }
+
+                if (go)
+                {
+                    Next(ref x, ref y);
+                    prev = 0;
+                }
+                else
+                {
+                    Back(ref x, ref y);
+                    prev = arr[x, y];
+                    arr[x, y] = 0;
+                }          
+            }
+        }
 
         static void M1(int x, int y, int prev = 0)
         {
@@ -77,50 +114,17 @@ namespace YieldTest
 
         private static bool CheckConditions(int x, int y, int item)
         {
-            var res = true;
             var ctrs = GetConstrains(x, y);
-
             if (ctrs.All(i => i == 0)) return true;
 
             arr[x, y] = item;
+            
+            var res = Cons1(ctrs, x, y) &&
+                Cons2(ctrs, x, y) && 
+                Cons3(ctrs, x, y) &&
+                Cons4(ctrs, x, y);
 
-            if (ctrs.Any(i => i == 1))
-                res = Cons1(ctrs, x, y);
-
-            if (!res)
-            {
-                arr[x, y] = 0;
-                return false;
-            }
-
-
-            if (ctrs.Any(i => i == 4))
-                res = Cons4(ctrs, x, y);
-
-            if (!res)
-            {
-                arr[x, y] = 0;
-                return res;
-            }
-
-            if (ctrs.Any(i => i == 3))
-                res = Cons3(ctrs, x, y);
-
-            if (!res)
-            {
-                arr[x, y] = 0;
-                return res;
-            }
-
-            if (ctrs.Any(i => i == 2))
-                res = Cons2(ctrs, x, y);
-
-            if (!res)
-            {
-                arr[x, y] = 0;
-                return res;
-            }
-
+            arr[x, y] = 0;
             return res;
         }
 
@@ -449,10 +453,8 @@ namespace YieldTest
 
         static IEnumerable<int> GetNum(int n)
         {
-            for (int i = n + 1; i < 5; i++)
-            {
-                yield return i;
-            }
+            for (int i = n + 1; i < 5; i++)            
+                yield return i;            
         }
     }
 }
