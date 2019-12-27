@@ -124,6 +124,30 @@ namespace YieldTest
             return res;
         }
 
+        private static bool Cons1(List<int> ctrs, int x, int y)
+        {
+            if (ctrs[0] == 1)
+            {
+                return arr[x, 0] == 4 || arr[x, 0] == 0;
+            }
+
+            if (ctrs[1] == 1)
+            {
+                return arr[x, 3] == 4 || arr[x, 3] == 0;
+            }
+
+            if (ctrs[2] == 1)
+            {
+                return arr[0, y] == 4 || arr[0, y] == 0;
+            }
+
+            if (ctrs[3] == 1)
+            {
+                return arr[3, y] == 4 || arr[3, y] == 0;
+            }
+
+            return true;
+        }
         private static bool Cons2(List<int> ctrs, int x, int y)
         {
             if (ctrs[0] == 2)
@@ -219,7 +243,6 @@ namespace YieldTest
 
             return true;
         }
-
         private static bool Cons3(List<int> ctrs, int x, int y)
         {
             if (ctrs[0] == 3)
@@ -385,32 +408,7 @@ namespace YieldTest
 
             return new List<int> { lRow, rRow, lCol, rCol };
         }
-
-        private static bool Cons1(List<int> ctrs, int x, int y)
-        {
-            if (ctrs[0] == 1)
-            {
-                return arr[x, 0] == 4 || arr[x, 0] == 0;
-            }
-
-            if (ctrs[1] == 1)
-            {
-                return arr[x, 3] == 4 || arr[x, 3] == 0;
-            }
-
-            if (ctrs[2] == 1)
-            {
-                return arr[0, y] == 4 || arr[0, y] == 0;
-            }
-
-            if (ctrs[3] == 1)
-            {
-                return arr[3, y] == 4 || arr[3, y] == 0;
-            }
-
-            return true;
-        }
-
+       
         private static bool IfItemAlreadyInRowOrInCol(int x, int y, int item)
         {
             for (int i = 0; i < _size; i++)
